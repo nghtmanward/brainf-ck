@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>BRAINFUCK</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0a0a0f;--surface:#111118;--surface2:#1a1a24;
+      --green:#4ade80;--green-dim:#1a3d2a;
+      --red:#ef4444;--amber:#f59e0b;
+      --text:#e2e8f0;--muted:#64748b;
+      --mono:'Share Tech Mono',monospace;
+      --horror-red:#8b0000;
+    }
+    body{background:var(--bg);color:var(--text);font-family:var(--mono);min-height:600px;overflow-x:hidden}
+    #title-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:580px;padding:2rem;text-align:center;position:relative;overflow:hidden;}
+    .bg-flowers{position:absolute;inset:0;pointer-events:none;opacity:0.07}
+    .flower{position:absolute;font-size:24px;animation:sway 3s ease-in-out infinite;}
+    @keyframes sway{0%,100%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-6px)}}
+    .title-main{font-size:clamp(28px,5vw,52px);font-weight:900;letter-spacing:0.05em;color:#fff;text-shadow:0 0 30px rgba(239,68,68,0.4);font-family:var(--mono);line-height:1.1;margin-bottom:0.5rem;}
+    .title-sub{font-size:13px;color:var(--muted);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:2.5rem}
+    .subtitle-warn{font-size:11px;color:#ef4444;letter-spacing:0.2em;margin-top:0.5rem;opacity:0.7}
+    .selfie-area{width:120px;height:120px;border:2px solid var(--green);border-radius:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;cursor:pointer;margin:1.5rem auto;transition:border-color 0.3s;position:relative;overflow:hidden;}
+    .selfie-area:hover{border-color:#fff}
+    .selfie-area span{font-size:11px;color:var(--muted);text-align:center;line-height:1.4}
+    .selfie-area i{font-size:28px;color:var(--green)}
+    #selfie-canvas{display:none;width:120px;height:120px;border-radius:6px}
+    #file-input{display:none}
+    .start-btn{background:transparent;border:1.5px solid var(--green);color:var(--green);padding:0.75rem 2.5rem;font-family:var(--mono);font-size:15px;cursor:pointer;letter-spacing:0.2em;border-radius:4px;transition:all 0.2s;}
+    .start-btn:hover{background:var(--green);color:#000}
+    .start-btn:disabled{opacity:0.3;cursor:not-allowed}
+    .zone-list{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:2rem;max-width:500px;}
+    .zone-pill{padding:4px 10px;border-radius:20px;font-size:11px;letter-spacing:0.1em;border:1px solid;}
+    .zone-pill.active{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+    .zone-pill.locked{background:transparent;border-color:#333;color:#444}
+    .zone-pill.boss{border-color:var(--horror-red);color:var(--horror-red);background:rgba(139,0,0,0.1)}
+    #game-screen{display:none;min-height:580px;flex-direction:column}
+    .hud{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--surface);border-bottom:1px solid #1e1e2e;}
+    .hud-zone{font-size:13px;color:var(--green);letter-spacing:0.15em}
+    .hud-spacer{flex:1}
+    .hud-sanity{font-size:11px;color:var(--muted)}
+    .sanity-bar{height:4px;width:80px;background:#1e1e2e;border-radius:2px;overflow:hidden}
+    .sanity-fill{height:100%;background:var(--green);transition:width 0.5s,background 0.5s;border-radius:2px}
+    .game-layout{display:flex;flex:1;gap:0}
+    .world-panel{flex:1;padding:1.5rem;background:var(--bg);position:relative;overflow:hidden;display:flex;flex-direction:column;gap:1rem;}
+    .world-scene{height:180px;background:var(--surface);border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:flex-end;border:1px solid #1e1e2e;}
+    .scene-ground{position:absolute;bottom:0;width:100%;height:40px;background:linear-gradient(to top, #1a3d2a, transparent);}
+    .scene-sky{position:absolute;top:0;width:100%;height:60%;transition:background 2s;}
+    .scene-element{position:absolute;font-size:20px;transition:all 1s;cursor:default}
+    .narrative-text{font-size:12px;color:var(--muted);line-height:1.8;background:var(--surface);border-radius:6px;padding:0.75rem 1rem;border-left:3px solid var(--green);min-height:60px;transition:border-color 1s;}
+    .code-panel{width:280px;background:var(--surface);border-left:1px solid #1e1e2e;display:flex;flex-direction:column;}
+    .panel-header{padding:10px 14px;border-bottom:1px solid #1e1e2e;font-size:11px;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;}
+    .lang-badge{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--green-dim);border:1px solid var(--green);color:var(--green);}
+    .puzzle-prompt{padding:12px 14px;font-size:12px;line-height:1.7;color:var(--text);border-bottom:1px solid #1e1e2e;}
+    .puzzle-prompt .hint{font-size:11px;color:var(--amber);margin-top:6px}
+    #code-editor{flex:1;background:transparent;border:none;outline:none;resize:none;font-family:var(--mono);font-size:13px;color:var(--text);padding:12px 14px;line-height:1.8;border-bottom:1px solid #1e1e2e;min-height:120px;}
+    .run-btn{margin:10px 14px;padding:8px;background:transparent;border:1px solid var(--green);color:var(--green);font-family:var(--mono);font-size:12px;cursor:pointer;border-radius:4px;letter-spacing:0.1em;transition:all 0.2s;}
+    .run-btn:hover{background:var(--green);color:#000}
+    .output-area{padding:10px 14px;font-size:12px;min-height:60px;color:var(--green);line-height:1.7;border-top:1px solid #1e1e2e;}
+    .output-area.error{color:var(--red)}
+    .output-area.success{color:var(--green)}
+    .selfie-panel{padding:10px 14px;border-top:1px solid #1e1e2e;display:flex;align-items:center;gap:10px;}
+    .mini-selfie{width:40px;height:40px;border-radius:4px;border:1px solid #333;object-fit:cover}
+    .selfie-label{font-size:10px;color:var(--muted);line-height:1.5}
+    .glitch{animation:glitch 0.15s infinite}
+    @keyframes glitch{0%{transform:translate(0)}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}60%{transform:translate(-1px,2px)}80%{transform:translate(1px,-2px)}100%{transform:translate(0)}}
+    canvas{border-radius:4px}
+    .progress-dots{display:flex;gap:6px;justify-content:center;margin-top:1rem}
+    .dot{width:8px;height:8px;border-radius:50%;background:#1e1e2e;transition:background 0.5f}
+    .dot.done{background:var(--green)}
+    .dot.current{background:var(--amber)}
+    #intro-msg{font-size:12px;color:var(--muted);max-width:380px;line-height:1.8;text-align:center;margin:1rem auto 0;}
+  </style>
+</head>
+<body>
+
+  <div id="title-screen">
+    <div class="bg-flowers" id="flower-bg"></div>
+    <div class="title-main">BRAINFUCK</div>
+    <div class="title-sub">A Developer Horror Puzzle Game</div>
+    <div class="subtitle-warn">[ sanity not guaranteed ]</div>
+    <div class="selfie-area" id="selfie-drop" onclick="document.getElementById('file-input').click()">
+      <canvas id="selfie-canvas"></canvas>
+      <i class="ti ti-camera" id="selfie-icon"></i>
+      <span id="selfie-hint">upload your selfie<br>to begin</span>
+    </div>
+    <input type="file" id="file-input" accept="image/*">
+    <button class="start-btn" id="start-btn" disabled>ENTER THE WORLD</button>
+    <div class="zone-list">
+      <span class="zone-pill active">Python</span>
+      <span class="zone-pill locked">Lua</span>
+      <span class="zone-pill locked">SQL</span>
+      <span class="zone-pill locked">Rust</span>
+      <span class="zone-pill locked">C++</span>
+      <span class="zone-pill boss">Brainfuck</span>
+      <span class="zone-pill boss">Assembly</span>
+    </div>
+    <p id="intro-msg">Your face will be corrupted a little more with each zone you complete.<br>See you on the other side. <span style="color:var(--red)">Probably.</span></p>
+  </div>
+
+  <div id="game-screen">
+    <div class="hud">
+      <span class="hud-zone" id="zone-label">ZONE_01 :: PYTHON</span>
+      <div class="hud-spacer"></div>
+      <div class="hud-sanity">SANITY</div>
+      <div class="sanity-bar"><div class="sanity-fill" id="sanity-fill" style="width:100%"></div></div>
+      <span style="font-size:11px;color:var(--muted)" id="sanity-pct">100%</span>
+    </div>
+    <div class="game-layout">
+      <div class="world-panel">
+        <div class="world-scene" id="world-scene">
+          <div class="scene-sky" id="scene-sky" style="background:linear-gradient(to bottom,#1a3a5c,#0a0a1f)"></div>
+          <div class="scene-ground"></div>
+          <div class="scene-element" id="el-tree" style="bottom:30px;left:15%">🌲</div>
+          <div class="scene-element" id="el-flower1" style="bottom:32px;left:30%">🌸</div>
+          <div class="scene-element" id="el-flower2" style="bottom:32px;left:50%">🌺</div>
+          <div class="scene-element" id="el-sun" style="top:15px;right:20px">☀️</div>
+          <div class="scene-element" id="el-bird" style="top:25px;left:40%">🐦</div>
+        </div>
+        <div class="narrative-text" id="narrative-text">
+          You open your eyes. The world is impossibly beautiful. Flowers bloom in real-time. The sky hums a perfect C major chord. Your code runs on the first try. <span style="color:var(--amber)">Something feels slightly too good.</span>
+        </div>
+        <div class="progress-dots">
+          <div class="dot current" title="Puzzle 1"></div>
+          <div class="dot" title="Puzzle 2"></div>
+          <div class="dot" title="Puzzle 3"></div>
+        </div>
+      </div>
+      <div class="code-panel">
+        <div class="panel-header">
+          <span>Puzzle 1/3</span>
+          <span class="lang-badge">Python 3</span>
+        </div>
+        <div class="puzzle-prompt">
+          Write <code style="color:var(--green)">answer(n)</code> that returns its square root if it's a perfect square, or <code style="color:var(--amber)">-1</code> if not.<br>
+          <div class="hint"><strong>144</strong></div>
+        </div>
+        <textarea id="code-editor" spellcheck="false" placeholder="# your solution here&#10;def answer(n):&#10;    "></textarea>
+        <button class="run-btn" onclick="runCode()">▶ RUN</button>
+        <div class="output-area" id="output-area">// output will appear here</div>
+        <div class="selfie-panel">
+          <canvas id="mini-selfie-canvas" class="mini-selfie" width="40" height="40"></canvas>
+          <div class="selfie-label">corruption: <span style="color:var(--green)" id="corrupt-pct">0%</span><br><span style="font-size:9px;color:#333">solve to see changes</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
