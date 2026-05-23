@@ -1,0 +1,79 @@
+{
+  "zone": "rust",
+  "label": "ZONE_04 :: RUST",
+  "badge": "Rust",
+  "puzzle_count": 5,
+  "corruption_per_puzzle": 14,
+  "puzzles": [
+    {
+      "id": "rs_001",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "rs_002",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "rs_003",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "rs_004",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "rs_005",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    }
+  ]
+}

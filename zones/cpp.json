@@ -1,0 +1,79 @@
+{
+  "zone": "cpp",
+  "label": "ZONE_05 :: C++",
+  "badge": "C++",
+  "puzzle_count": 5,
+  "corruption_per_puzzle": 16,
+  "puzzles": [
+    {
+      "id": "cpp_001",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "cpp_002",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "cpp_003",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "cpp_004",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "cpp_005",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    }
+  ]
+}

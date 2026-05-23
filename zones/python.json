@@ -1,0 +1,51 @@
+{
+  "zone": "python",
+  "label": "ZONE_01 :: PYTHON",
+  "badge": "Python 3",
+  "puzzle_count": 3,
+  "corruption_per_puzzle": 8,
+  "puzzles": [
+    {
+      "id": "py_001",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "py_002",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "py_003",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    }
+  ]
+}

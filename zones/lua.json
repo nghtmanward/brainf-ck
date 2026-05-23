@@ -1,0 +1,65 @@
+{
+  "zone": "lua",
+  "label": "ZONE_02 :: LUA",
+  "badge": "Lua 5.4",
+  "puzzle_count": 4,
+  "corruption_per_puzzle": 10,
+  "puzzles": [
+    {
+      "id": "lua_001",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "lua_002",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "lua_003",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "lua_004",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "testCall": "",
+      "expected": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    }
+  ]
+}

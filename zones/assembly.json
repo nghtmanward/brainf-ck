@@ -1,0 +1,30 @@
+{
+  "zone": "assembly",
+  "label": "ZONE_07 :: ASSEMBLY",
+  "badge": "x86 ASM",
+  "puzzle_count": 1,
+  "corruption_per_puzzle": 0,
+  "puzzles": [
+    {
+      "id": "asm_001",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "program": "",
+      "expected_registers": {
+        "eax": "",
+        "ebx": "",
+        "ecx": "",
+        "edx": ""
+      },
+      "expected_memory": "",
+      "narrative_fail": "",
+      "narrative_success": "The void recedes. The flowers return. You are still here.",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "zone": "brainfuck",
+  "label": "ZONE_06 :: BRAINF*CK",
+  "badge": "Brainf*ck",
+  "puzzle_count": -1,
+  "corruption_per_puzzle": 20,
+  "puzzles": [
+    {
+      "id": "bf_001",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "program": "",
+      "expected_output": "",
+      "expected_tape": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "bf_002",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "program": "",
+      "expected_output": "",
+      "expected_tape": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "bf_003",
+      "title": "",
+      "prompt": "",
+      "hint": "",
+      "program": "",
+      "expected_output": "",
+      "expected_tape": "",
+      "narrative": "",
+      "hints": [
+        "",
+        "",
+        ""
+      ]
+    }
+  ]
+}
