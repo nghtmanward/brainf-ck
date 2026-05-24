@@ -5,6 +5,7 @@
   <title>BRAINFUCK</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fengari-web@0.1.4/dist/fengari.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
     *{box-sizing:border-box;margin:0;padding:0}
@@ -64,7 +65,7 @@
     .output-area.error{color:var(--red)}
     .output-area.success{color:var(--green)}
     .selfie-panel{padding:10px 14px;border-top:1px solid #1e1e2e;display:flex;align-items:center;gap:10px;}
-    .mini-selfie{width:40px;height:40px;border-radius:4px;border:1px solid #333;object-fit:cover}
+    .mini-selfie{width:120px;height:120px;border-radius:4px;border:1px solid #333;object-fit:cover}
     .selfie-label{font-size:10px;color:var(--muted);line-height:1.5}
     .glitch{animation:glitch 0.15s infinite}
     @keyframes glitch{0%{transform:translate(0)}20%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}60%{transform:translate(-1px,2px)}80%{transform:translate(1px,-2px)}100%{transform:translate(0)}}
@@ -143,7 +144,7 @@
         <button class="run-btn" onclick="runCode()">▶ RUN</button>
         <div class="output-area" id="output-area">// output will appear here</div>
         <div class="selfie-panel">
-          <canvas id="mini-selfie-canvas" class="mini-selfie" width="40" height="40"></canvas>
+          <canvas id="mini-selfie-canvas" class="mini-selfie" width="120" height="120"></canvas>
           <div class="selfie-label">corruption: <span style="color:var(--green)" id="corrupt-pct">0%</span><br><span style="font-size:9px;color:#333">solve to see changes</span></div>
         </div>
       </div>

@@ -11,48 +11,39 @@ const state = {
   zones: ['python', 'lua', 'sql', 'rust', 'cpp', 'brainfuck', 'assembly']
 }
 
-// ─── pyodide ──────────────────────────────────────────────
+// ─── zone data ────────────────────────────────────────────
+let PUZZLES = []
+let ZONE_DATA = null
 let pyodide = null
 
+// ─── zone loader ──────────────────────────────────────────
+async function loadZone(zoneName) {
+  const response = await fetch(`./zones/${zoneName}.json`)
+  const data = await response.json()
+  return data
+}
+
+function pickPuzzles(data, count) {
+  const easy   = data.puzzles.filter(p => p.difficulty === 'easy')
+  const medium = data.puzzles.filter(p => p.difficulty === 'medium')
+  const hard   = data.puzzles.filter(p => p.difficulty === 'hard')
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]
+  const picked = []
+  if(count >= 1) picked.push(pick(easy))
+  if(count >= 2) picked.push(pick(medium))
+  if(count >= 3) picked.push(pick(hard))
+  if(count >= 4) picked.push(pick(medium))
+  if(count >= 5) picked.push(pick(hard))
+  return picked.filter(Boolean)
+}
+
+// ─── pyodide ──────────────────────────────────────────────
 async function initPyodide() {
   setOutput('// loading Python runtime...', '')
   pyodide = await loadPyodide()
   setOutput('// Python ready. Write your solution.', '')
   console.log('Pyodide ready')
 }
-
-initPyodide()
-
-// ─── puzzles ──────────────────────────────────────────────
-const PUZZLES = [
-  {
-    prompt: 'Write <code style="color:var(--green)">answer(n)</code> that returns the square root if perfect square, else <code style="color:var(--amber)">-1</code>.',
-    hint: 'Input: <strong>144</strong>',
-    testCall: 'answer(144)',
-    check: (r) => {
-      if(r === 12) return {ok:true, out:`>>> answer(144)\n12\n\n✓ correct. The world smells like fresh flowers.`}
-      return {ok:false, out:`>>> answer(144)\n${r}\n\n✗ expected 12`}
-    }
-  },
-  {
-    prompt: 'Write <code style="color:var(--green)">flatten(lst)</code> that takes a nested list and returns it flat.',
-    hint: 'Input: <strong>[[1,2],[3,[4,5]],6]</strong>',
-    testCall: 'str(flatten([[1,2],[3,[4,5]],6]))',
-    check: (r) => {
-      if(r === '[1, 2, 3, 4, 5, 6]') return {ok:true, out:`>>> flatten([[1,2],[3,[4,5]],6])\n[1, 2, 3, 4, 5, 6]\n\n✓ A flower turns to look at you. That's... normal.`}
-      return {ok:false, out:`>>> got: ${r}\n✗ expected [1, 2, 3, 4, 5, 6]`}
-    }
-  },
-  {
-    prompt: 'Write <code style="color:var(--green)">cipher(s,n)</code> that applies a Caesar cipher (ROT-N) to string s.',
-    hint: 'cipher("hello", 13) → "uryyb"',
-    testCall: 'cipher("hello", 13)',
-    check: (r) => {
-      if(r === 'uryyb') return {ok:true, out:`>>> cipher("hello", 13)\nuryyb\n\n✓ The bird flew into the tree and didn't come back out.`}
-      return {ok:false, out:`>>> got: ${r}\n✗ expected uryyb`}
-    }
-  }
-]
 
 // ─── flowers ─────────────────────────────────────────────
 function plantFlowers() {
@@ -67,34 +58,6 @@ function plantFlowers() {
   }
 }
 
-// ─── selfie ───────────────────────────────────────────────
-document.getElementById('file-input').addEventListener('change', e => {
-  const file = e.target.files[0]
-  if(!file) return
-  const reader = new FileReader()
-  reader.onload = ev => {
-    const img = new Image()
-    img.onload = () => {
-      const c = document.getElementById('selfie-canvas')
-      c.width = 120; c.height = 120
-      const ctx = c.getContext('2d')
-      const side = Math.min(img.width, img.height)
-      const sx = (img.width-side)/2, sy = (img.height-side)/2
-      ctx.drawImage(img, sx, sy, side, side, 0, 0, 120, 120)
-      c.style.display = 'block'
-      document.getElementById('selfie-icon').style.display = 'none'
-      document.getElementById('selfie-hint').style.display = 'none'
-      state.selfieData = ctx.getImageData(0, 0, 120, 120)
-      state.selfieLoaded = true
-      document.getElementById('start-btn').disabled = false
-      document.getElementById('start-btn').textContent = 'ENTER THE WORLD ↗'
-      copyToMini()
-    }
-    img.src = ev.target.result
-  }
-  reader.readAsDataURL(file)
-})
-
 function copyToMini() {
   if(!state.selfieData) return
   const c = document.getElementById('mini-selfie-canvas')
@@ -103,31 +66,60 @@ function copyToMini() {
   tmp.width = 120; tmp.height = 120
   const tctx = tmp.getContext('2d')
   tctx.putImageData(state.selfieData, 0, 0)
-  ctx.drawImage(tmp, 0, 0, 40, 40)
+  ctx.drawImage(tmp, 0, 0, 120, 120)
 }
 
-// ─── navigation ───────────────────────────────────────────
-document.getElementById('start-btn').addEventListener('click', () => {
-  if(!state.selfieLoaded) return
-  document.getElementById('title-screen').style.display = 'none'
-  const gs = document.getElementById('game-screen')
-  gs.style.display = 'flex'
-  updatePuzzleUI()
-})
+// ─── attach listeners ─────────────────────────────────────
+function attachListeners() {
+  document.getElementById('file-input').addEventListener('change', e => {
+    const file = e.target.files[0]
+    if(!file) return
+    const reader = new FileReader()
+    reader.onload = ev => {
+      const img = new Image()
+      img.onload = () => {
+        const c = document.getElementById('selfie-canvas')
+        c.width = 120; c.height = 120
+        const ctx = c.getContext('2d')
+        const side = Math.min(img.width, img.height)
+        const sx = (img.width-side)/2, sy = (img.height-side)/2
+        ctx.drawImage(img, sx, sy, side, side, 0, 0, 120, 120)
+        c.style.display = 'block'
+        document.getElementById('selfie-icon').style.display = 'none'
+        document.getElementById('selfie-hint').style.display = 'none'
+        state.selfieData = ctx.getImageData(0, 0, 120, 120)
+        state.selfieLoaded = true
+        document.getElementById('start-btn').disabled = false
+        document.getElementById('start-btn').textContent = 'ENTER THE WORLD ↗'
+        copyToMini()
+      }
+      img.src = ev.target.result
+    }
+    reader.readAsDataURL(file)
+  })
+
+  document.getElementById('start-btn').addEventListener('click', () => {
+    if(!state.selfieLoaded) return
+    document.getElementById('title-screen').style.display = 'none'
+    const gs = document.getElementById('game-screen')
+    gs.style.display = 'flex'
+    updatePuzzleUI()
+  })
+}
 
 // ─── puzzle ───────────────────────────────────────────────
 function updatePuzzleUI() {
   const p = PUZZLES[state.puzzle]
   if(!p) return
-  document.querySelector('.puzzle-prompt').innerHTML = `${p.prompt}<div class="hint">Input: ${p.hint}</div>`
-  document.getElementById('code-editor').value = ''
+  document.querySelector('.puzzle-prompt').innerHTML = `${p.prompt}<div class="hint">${p.hint}</div>`
+  document.getElementById('code-editor').value = p.starter_code || ''
   document.getElementById('output-area').textContent = '// output will appear here'
   document.getElementById('output-area').className = 'output-area'
   const dots = document.querySelectorAll('.dot')
   dots.forEach((d,i) => {
     d.className = 'dot' + (i<state.puzzle?' done':i===state.puzzle?' current':'')
   })
-  document.querySelector('.panel-header span:first-child').textContent = `Puzzle ${state.puzzle+1}/3`
+  document.querySelector('.panel-header span:first-child').textContent = `Puzzle ${state.puzzle+1}/${PUZZLES.length}`
 }
 
 // ─── router ───────────────────────────────────────────────
@@ -136,28 +128,41 @@ function runCode() {
   if(zone === 'python') runPython()
   else if(zone === 'lua') runLua()
   else if(zone === 'sql') runSQL()
-  // etc
+  else if(zone === 'rust') runRust()
+  else if(zone === 'cpp') runCpp()
+  else if(zone === 'brainfuck') runBrainfuck()
+  else if(zone === 'assembly') runAssembly()
 }
 
+// ─── python ───────────────────────────────────────────────
 async function runPython() {
   if(!pyodide){ setOutput('// Python runtime still loading...', 'error'); return }
   const code = document.getElementById('code-editor').value.trim()
   if(!code){ setOutput('// write your function first', 'error'); return }
 
   const p = PUZZLES[state.puzzle]
+  const testExpr = p.testCall || null
 
   try {
     await pyodide.runPythonAsync(code)
-    const result = await pyodide.runPythonAsync(p.testCall)
-    const res = p.check(result)
 
-    if(res.ok){
-      setOutput(res.out, 'success')
+    if(!testExpr){
+      setOutput('// no testCall found in puzzle', 'error')
+      return
+    }
+
+    const result = await pyodide.runPythonAsync(`str(${testExpr})`)
+    const actual = String(result).trim()
+    const expected = String(p.expected_output).trim()
+
+    if(actual === expected){
+      console.log('MATCH — actual:', JSON.stringify(actual), 'expected:', JSON.stringify(expected))
+      setOutput(`>>> ${actual}\n\n✓ ${p.narrative}`, 'success')
       state.puzzlesSolved++
-      state.corruption += 8
+      state.corruption += ZONE_DATA.corruption_per_puzzle
       setTimeout(() => {
         state.puzzle++
-        if(state.puzzle < 3){
+        if(state.puzzle < PUZZLES.length){
           updatePuzzleUI()
           triggerGlitch(state.puzzlesSolved)
           updateCorruption()
@@ -167,10 +172,11 @@ async function runPython() {
         }
       }, 1800)
     } else {
+      console.log('MISMATCH — actual:', JSON.stringify(actual), 'expected:', JSON.stringify(expected))
       state.wrongAttempts++
       state.sanity = Math.max(20, state.sanity-4)
       updateSanity()
-      setOutput(res.out, 'error')
+      setOutput(`>>> got: ${actual}\n✗ expected: ${expected}`, 'error')
       if(state.wrongAttempts % 3 === 0) addGlitchEffect()
     }
   } catch(e) {
@@ -182,6 +188,60 @@ async function runPython() {
   }
 }
 
+// ─── lua ──────────────────────────────────────────────────
+function runLua() {
+  const code = document.getElementById('code-editor').value.trim()
+  if(!code){ setOutput('// write your solution first', 'error'); return }
+
+  const p = PUZZLES[state.puzzle]
+
+  try {
+    const fullCode = code + '\nreturn ' + p.testCall
+    const result = fengari.load(fengari.to_luastring(fullCode))()
+    const actual = String(result).trim()
+    const expected = String(p.expected_output).trim()
+
+    if(actual === expected){
+      console.log('MATCH — actual:', JSON.stringify(actual), 'expected:', JSON.stringify(expected))
+      setOutput(`>>> ${actual}\n\n✓ ${p.narrative}`, 'success')
+      state.puzzlesSolved++
+      state.corruption += ZONE_DATA.corruption_per_puzzle
+      setTimeout(() => {
+        state.puzzle++
+        if(state.puzzle < PUZZLES.length){
+          updatePuzzleUI()
+          triggerGlitch(state.puzzlesSolved)
+          updateCorruption()
+        } else {
+          setOutput('// LUA ZONE COMPLETE\n// The cracks are spreading.\n// SQL awaits. Reality is missing rows.', 'success')
+          triggerZoneComplete()
+        }
+      }, 1800)
+    } else {
+      console.log('MISMATCH — actual:', JSON.stringify(actual), 'expected:', JSON.stringify(expected))
+      state.wrongAttempts++
+      state.sanity = Math.max(20, state.sanity-4)
+      updateSanity()
+      setOutput(`>>> got: ${actual}\n✗ expected: ${expected}`, 'error')
+      if(state.wrongAttempts % 3 === 0) addGlitchEffect()
+    }
+  } catch(e) {
+    state.wrongAttempts++
+    state.sanity = Math.max(20, state.sanity-4)
+    updateSanity()
+    setOutput(`Lua error:\n${e.message}`, 'error')
+    if(state.wrongAttempts % 3 === 0) addGlitchEffect()
+  }
+}
+
+// ─── sql / rust / cpp / brainfuck / assembly ──────────────
+function runSQL() { setOutput('// SQL zone coming soon', '') }
+function runRust() { setOutput('// Rust zone coming soon', '') }
+function runCpp() { setOutput('// C++ zone coming soon', '') }
+function runBrainfuck() { setOutput('// Brainf*ck zone coming soon', '') }
+function runAssembly() { setOutput('// Assembly zone coming soon', '') }
+
+// ─── output ───────────────────────────────────────────────
 function setOutput(text, cls) {
   const el = document.getElementById('output-area')
   el.textContent = text
@@ -216,7 +276,7 @@ function updateCorruption() {
     }
   }
   tctx.putImageData(d, 0, 0)
-  ctx.drawImage(tmp, 0, 0, 40, 40)
+  ctx.drawImage(tmp, 0, 0, 120, 120)
 }
 
 // ─── world ────────────────────────────────────────────────
@@ -245,15 +305,56 @@ function addGlitchEffect() {
   setTimeout(() => scene.classList.remove('glitch'), 300)
 }
 
+// ─── zone complete ────────────────────────────────────────
 function triggerZoneComplete() {
   const nar = document.getElementById('narrative-text')
-  nar.innerHTML = 'Python zone complete. You look back. The path behind you has crumbled. <span style="color:var(--red)">There is no going back.</span> Lua awaits. It smiles with too many teeth.'
+  const currentZoneName = state.zones[state.currentZone]
+  const nextZone = state.zones[state.currentZone + 1]
+
+  const messages = {
+    python: 'Python zone complete. You look back. The path behind you has crumbled. <span style="color:var(--red)">There is no going back.</span> Lua awaits. It smiles with too many teeth.',
+    lua: 'Lua zone complete. The world is quieter now. Quieter in the wrong way. <span style="color:var(--red)">SQL awaits. Reality is missing rows.</span>',
+    sql: 'SQL zone complete. Some rows never came back. <span style="color:var(--red)">Rust awaits. It will take things from you.</span>',
+    rust: 'Rust zone complete. The borrow checker is satisfied. <span style="color:var(--red)">You are not. C++ awaits.</span>',
+    cpp: 'C++ zone complete. You deleted something you needed. <span style="color:var(--red)">Brainf*ck awaits. There is no syntax highlighting in the void.</span>',
+    brainfuck: 'Brainf*ck zone complete. You understand nothing and everything. <span style="color:var(--red)">Assembly awaits. One last thing.</span>'
+  }
+
+  nar.innerHTML = messages[currentZoneName] || 'Zone complete.'
   nar.style.borderLeftColor = 'var(--red)'
-  document.getElementById('el-flower2').style.opacity = '0'
-  document.getElementById('el-sun').style.opacity = '0'
-  document.getElementById('zone-label').textContent = 'ZONE_02 :: LUA [coming soon]'
-  document.getElementById('zone-label').style.color = 'var(--amber)'
+
+  if(nextZone){
+    setTimeout(() => {
+      enterZone(nextZone)
+    }, 3000)
+  }
+}
+
+// ─── zone transition ──────────────────────────────────────
+async function enterZone(zoneName) {
+  ZONE_DATA = await loadZone(zoneName)
+  PUZZLES = pickPuzzles(ZONE_DATA, ZONE_DATA.puzzle_count)
+  state.puzzle = 0
+  state.currentZone = state.zones.indexOf(zoneName)
+  console.log('Zone loaded:', ZONE_DATA.label, '— puzzles:', PUZZLES.length)
+  updatePuzzleUI()
+  updateHUD()
+}
+
+function updateHUD() {
+  document.getElementById('zone-label').textContent = ZONE_DATA.label
+  document.getElementById('zone-label').style.color = 'var(--green)'
+  document.querySelector('.lang-badge').textContent = ZONE_DATA.badge
 }
 
 // ─── init ─────────────────────────────────────────────────
-plantFlowers()
+async function init() {
+  await initPyodide()
+  ZONE_DATA = await loadZone('python')
+  PUZZLES = pickPuzzles(ZONE_DATA, ZONE_DATA.puzzle_count)
+  console.log('Zone loaded:', ZONE_DATA.label, '— puzzles:', PUZZLES.length)
+  plantFlowers()
+  attachListeners()
+}
+
+init()
