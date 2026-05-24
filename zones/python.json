@@ -7,44 +7,137 @@
   "puzzles": [
     {
       "id": "py_001",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Hello Function",
+      "prompt": "Complete the function so it returns the string 'Hello'.",
+      "hint": "greet() → 'Hello'",
+      "starter_code": "def greet():\n    # TODO: return 'Hello'\n    pass\n\nprint(greet())",
+      "expected_output": "Hello",
+      "difficulty": "easy",
+      "narrative": "The world is perfect. The code is clean. Everything works on the first try.",
       "hints": [
-        "",
-        "",
-        ""
+        "functions return values with the return keyword",
+        "string literals use single or double quotes",
+        "return 'Hello'"
       ]
     },
     {
       "id": "py_002",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Sum List",
+      "prompt": "Return the sum of all numbers in the list.",
+      "hint": "sum_list([1,2,3,4]) → 10",
+      "starter_code": "def sum_list(lst):\n    # TODO: sum values\n    pass\n\nprint(sum_list([1,2,3,4]))",
+      "expected_output": "10",
+      "difficulty": "easy",
+      "narrative": "Four numbers. One answer. The flowers are still here. Most of them.",
       "hints": [
-        "",
-        "",
-        ""
+        "Python has a built-in sum() function",
+        "or loop through the list and accumulate",
+        "return sum(lst)"
       ]
     },
     {
       "id": "py_003",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Reverse String",
+      "prompt": "Reverse the input string without using slicing.",
+      "hint": "reverse_string('hello') → 'olleh'",
+      "starter_code": "def reverse_string(s):\n    # TODO: reverse manually\n    pass\n\nprint(reverse_string('hello'))",
+      "expected_output": "olleh",
+      "difficulty": "medium",
+      "narrative": "No shortcuts. Do it manually. The easy path is gone.",
       "hints": [
-        "",
-        "",
-        ""
+        "loop through the string from the end to the start",
+        "concatenate characters into a new string",
+        "result = '' then for c in reversed(s): result += c"
+      ]
+    },
+    {
+      "id": "py_004",
+      "title": "Count Characters",
+      "prompt": "Count how many times the character 'x' appears in the string.",
+      "hint": "count_x('xoxooxxx') → 5",
+      "starter_code": "def count_x(s):\n    # TODO: count occurrences of 'x'\n    pass\n\nprint(count_x('xoxooxxx'))",
+      "expected_output": "5",
+      "difficulty": "medium",
+      "narrative": "Count the x's. There are more than you think. There are always more.",
+      "hints": [
+        "strings have a built-in count() method",
+        "or loop and increment a counter",
+        "return s.count('x')"
+      ]
+    },
+    {
+      "id": "py_005",
+      "title": "Filter Even Numbers",
+      "prompt": "Return a new list containing only even numbers.",
+      "hint": "filter_even([1,2,3,4,5,6]) → [2, 4, 6]",
+      "starter_code": "def filter_even(lst):\n    # TODO: return list of even numbers\n    pass\n\nprint(filter_even([1,2,3,4,5,6]))",
+      "expected_output": "[2, 4, 6]",
+      "difficulty": "medium",
+      "narrative": "Only the even ones survive. The odd ones just stopped existing.",
+      "hints": [
+        "the modulo operator % checks for remainders",
+        "a list comprehension can filter in one line",
+        "return [x for x in lst if x % 2 == 0]"
+      ]
+    },
+    {
+      "id": "py_006",
+      "title": "Closure Counter",
+      "prompt": "Fix the function so it returns a counter that increments each call.",
+      "hint": "c() → 1, c() → 2, c() → 3",
+      "starter_code": "def make_counter():\n    n = 0\n    # TODO: return a function that increments and returns n\n\nc = make_counter()\nprint(c())\nprint(c())\nprint(c())",
+      "expected_output": "1\n2\n3",
+      "difficulty": "hard",
+      "narrative": "A function inside a function. The world is folding in on itself.",
+      "hints": [
+        "return an inner function defined inside make_counter",
+        "use the nonlocal keyword to modify n from the outer scope",
+        "nonlocal n then n += 1 then return n"
+      ]
+    },
+    {
+      "id": "py_007",
+      "title": "Recursive Factorial",
+      "prompt": "Implement factorial using recursion.",
+      "hint": "factorial(5) → 120",
+      "starter_code": "def factorial(n):\n    # TODO: recursive factorial\n    pass\n\nprint(factorial(5))",
+      "expected_output": "120",
+      "difficulty": "hard",
+      "narrative": "A function that calls itself. The world does this now too.",
+      "hints": [
+        "base case: factorial(0) or factorial(1) returns 1",
+        "recursive case: n multiplied by factorial of n-1",
+        "return 1 if n <= 1 else n * factorial(n-1)"
+      ]
+    },
+    {
+      "id": "py_008",
+      "title": "Deep Copy Dictionary",
+      "prompt": "Implement a deep copy function that handles nested dictionaries.",
+      "hint": "modifying copy should not affect original",
+      "starter_code": "def deep_copy(d):\n    # TODO: deep copy implementation\n    pass\n\noriginal = {'a': 1, 'b': {'c': 2}}\ncopy = deep_copy(original)\ncopy['b']['c'] = 99\nprint(original['b']['c'])",
+      "expected_output": "2",
+      "difficulty": "hard",
+      "narrative": "You made a copy. You changed the copy. The original changed anyway. Wait.",
+      "hints": [
+        "a simple dict.copy() only copies the top level",
+        "you need to recursively copy nested dicts",
+        "check isinstance(v, dict) before deciding how to copy each value"
+      ]
+    },
+    {
+      "id": "py_009",
+      "title": "Class: Vector2",
+      "prompt": "Finish the Vector2 class so add() returns a new Vector2 with summed components.",
+      "hint": "Vector2(3,4).add(Vector2(1,2)) → 4 6",
+      "starter_code": "class Vector2:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def add(self, other):\n        # TODO: return a new Vector2 with summed x and y\n        pass\n\nv1 = Vector2(3, 4)\nv2 = Vector2(1, 2)\nv3 = v1.add(v2)\nprint(v3.x, v3.y)",
+      "expected_output": "4 6",
+      "difficulty": "hard",
+      "narrative": "A class. An instance. A method. The world has structure. For now.",
+      "hints": [
+        "self refers to the current instance",
+        "other is the second Vector2 being passed in",
+        "return Vector2(self.x + other.x, self.y + other.y)"
       ]
     }
   ]

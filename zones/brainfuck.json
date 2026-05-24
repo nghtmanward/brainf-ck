@@ -7,42 +7,141 @@
   "puzzles": [
     {
       "id": "bf_001",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "program": "",
-      "expected_output": "",
-      "expected_tape": "",
-      "narrative": "",
+      "title": "Print A",
+      "prompt": "What does this program output?",
+      "program": "++++++++++[>++++++++++<-]>+.",
+      "input": [],
+      "expected_output": "A",
+      "mode": "read",
+      "difficulty": "easy",
+      "narrative": "The symbols mean nothing. Or do they. Stare longer.",
       "hints": [
-        "",
-        "",
-        ""
+        "count the outer loop iterations",
+        "what does the inner loop accumulate?",
+        "10 * 10 = 100, then +1 = 101. what ASCII is 101?"
       ]
     },
     {
       "id": "bf_002",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "program": "",
-      "expected_output": "",
-      "expected_tape": "",
-      "narrative": "",
+      "title": "Echo One Byte",
+      "prompt": "What does this program output given input 72?",
+      "program": ",.",
+      "input": [72],
+      "expected_output": "H",
+      "mode": "read",
+      "difficulty": "easy",
+      "narrative": "Two characters. That's all it takes. You feel something watching.",
       "hints": [
-        "",
-        "",
-        ""
+        ", reads one byte of input",
+        ". outputs the current cell",
+        "what is ASCII 72?"
       ]
     },
     {
       "id": "bf_003",
+      "title": "Hello Mini",
+      "prompt": "What does this program output?",
+      "program": "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>>>++.>+++++.",
+      "input": [],
+      "expected_output": "Hi!",
+      "mode": "read",
+      "difficulty": "easy",
+      "narrative": "It says hello. Things that say hello usually want something.",
+      "hints": [
+        "the outer loop runs 10 times",
+        "each inner cell accumulates a different multiple",
+        "trace cells 1, 2, 3 after the loop — what are their values?"
+      ]
+    },
+    {
+      "id": "bf_004",
+      "title": "Add Two Numbers",
+      "prompt": "What does this program output given inputs 40 and 1?",
+      "program": ",>,<[->+<]>.",
+      "input": [40, 1],
+      "expected_output": ")",
+      "mode": "read",
+      "difficulty": "medium",
+      "narrative": "Addition. The simplest thing. It takes 12 characters to say it here.",
+      "hints": [
+        "two inputs are read into cells 0 and 1",
+        "the loop moves cell 0 into cell 1",
+        "40 + 1 = 41. what ASCII is 41?"
+      ]
+    },
+    {
+      "id": "bf_005",
+      "title": "Countdown",
+      "prompt": "What does this program output?",
+      "program": "+++++[>++++++++++<-]>+++++.[-<.-<.-<.-<.]",
+      "input": [],
+      "expected_output": "54321",
+      "mode": "read",
+      "difficulty": "medium",
+      "narrative": "It counts down. Everything counts down eventually.",
+      "hints": [
+        "the first loop sets up ASCII '5' in cell 1",
+        "the second loop prints and decrements",
+        "ASCII '5' is 53 — what comes after 53, 52, 51..."
+      ]
+    },
+    {
+      "id": "bf_006",
+      "title": "Mirror String",
+      "prompt": "Write a Brainfuck program that echoes all input until a newline (ASCII 10).",
+      "program": ",[.[-],]",
+      "input": [72, 101, 121, 10],
+      "expected_output": "Hey",
+      "mode": "write",
+      "difficulty": "medium",
+      "narrative": "It wants you to repeat yourself. You already are.",
+      "hints": [
+        "read a byte with , then output it with .",
+        "loop until the current cell is 0",
+        "ASCII 10 is newline — that's your stop condition"
+      ]
+    },
+    {
+      "id": "bf_007",
+      "title": "Multiply",
+      "prompt": "Write a Brainfuck program that reads two bytes and outputs their product as a character.",
+      "program": ",>,<[>[->+>+<<]>>[-<<+>>]<<<-]>>.",
+      "input": [3, 4],
+      "expected_output": "\u000c",
+      "mode": "write",
+      "difficulty": "hard",
+      "narrative": "Multiplication. A simple concept. The tape disagrees.",
+      "hints": [
+        "repeated addition is the only tool you have",
+        "you need a temp cell to preserve values during the inner loop",
+        "outer loop runs n times, inner loop adds m each time"
+      ]
+    },
+    {
+      "id": "bf_008",
+      "title": "Zero-Terminated Sum",
+      "prompt": "Write a Brainfuck program that reads bytes until a 0, then outputs their sum as a character.",
+      "program": ",[>+<-,]>.",
+      "input": [5, 5, 10, 0],
+      "expected_output": "\u0014",
+      "mode": "write",
+      "difficulty": "hard",
+      "narrative": "Keep reading. Keep adding. Stop when you see nothing. Sound familiar?",
+      "hints": [
+        "read in a loop, break when input is 0",
+        "accumulate the sum in a separate cell",
+        "the loop condition is the current cell value after reading"
+      ]
+    },
+    {
+      "id": "bf_009",
       "title": "",
       "prompt": "",
-      "hint": "",
       "program": "",
+      "input": [],
       "expected_output": "",
-      "expected_tape": "",
+      "mode": "write",
+      "difficulty": "hard",
       "narrative": "",
       "hints": [
         "",

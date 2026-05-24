@@ -7,72 +7,137 @@
   "puzzles": [
     {
       "id": "cpp_001",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Sum Two Numbers",
+      "prompt": "Complete the function so it returns the sum of a and b.",
+      "hint": "add(3, 4) → 7",
+      "starter_code": "#include <iostream>\nusing namespace std;\nint add(int a, int b) {\n    // TODO: return the sum\n}\nint main() {\n    cout << add(3, 4);\n}",
+      "expected_output": "7",
+      "difficulty": "easy",
+      "narrative": "Simple. Clean. The world is still mostly intact.",
       "hints": [
-        "",
-        "",
-        ""
+        "a function can return a value with the return keyword",
+        "you have two parameters — what do you do with them?",
+        "return a + b"
       ]
     },
     {
       "id": "cpp_002",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Reverse a String",
+      "prompt": "Finish the function to reverse the input string.",
+      "hint": "reverseStr(\"hello\") → \"olleh\"",
+      "starter_code": "#include <iostream>\n#include <string>\nusing namespace std;\nstring reverseStr(string s) {\n    // TODO: reverse s\n}\nint main() {\n    cout << reverseStr(\"hello\");\n}",
+      "expected_output": "olleh",
+      "difficulty": "easy",
+      "narrative": "Something in the world flipped. You almost didn't notice.",
       "hints": [
-        "",
-        "",
-        ""
+        "strings can be iterated in reverse",
+        "std::reverse exists in <algorithm>",
+        "or loop from s.length()-1 down to 0"
       ]
     },
     {
       "id": "cpp_003",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Count Characters",
+      "prompt": "Return how many characters are in the string without using s.length().",
+      "hint": "countChars(\"abcdef\") → 6",
+      "starter_code": "#include <iostream>\n#include <string>\nusing namespace std;\nint countChars(string s) {\n    // TODO: count manually\n}\nint main() {\n    cout << countChars(\"abcdef\");\n}",
+      "expected_output": "6",
+      "difficulty": "medium",
+      "narrative": "Count them yourself. The easy way is gone. Did you see it leave?",
       "hints": [
-        "",
-        "",
-        ""
+        "a loop can iterate over each character",
+        "increment a counter for each character",
+        "stop when you hit the null terminator or end of string"
       ]
     },
     {
       "id": "cpp_004",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Find Max in Array",
+      "prompt": "Complete the function to return the largest number in the array.",
+      "hint": "{3, 9, 2, 7, 5} → 9",
+      "starter_code": "#include <iostream>\nusing namespace std;\nint findMax(int arr[], int size) {\n    // TODO: find max\n}\nint main() {\n    int arr[5] = {3, 9, 2, 7, 5};\n    cout << findMax(arr, 5);\n}",
+      "expected_output": "9",
+      "difficulty": "medium",
+      "narrative": "Find the largest thing left. There is less of everything now.",
       "hints": [
-        "",
-        "",
-        ""
+        "start by assuming the first element is the max",
+        "loop through the rest and compare",
+        "update your max when you find something larger"
       ]
     },
     {
       "id": "cpp_005",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Fibonacci",
+      "prompt": "Return the nth Fibonacci number using recursion.",
+      "hint": "fib(7) → 13",
+      "starter_code": "#include <iostream>\nusing namespace std;\nint fib(int n) {\n    // TODO: recursive Fibonacci\n}\nint main() {\n    cout << fib(7);\n}",
+      "expected_output": "13",
+      "difficulty": "medium",
+      "narrative": "A function that calls itself. The world does this now too.",
       "hints": [
-        "",
-        "",
-        ""
+        "base cases: fib(0) = 0, fib(1) = 1",
+        "every other case calls fib twice",
+        "return fib(n-1) + fib(n-2)"
+      ]
+    },
+    {
+      "id": "cpp_006",
+      "title": "Palindrome Check",
+      "prompt": "Return true if the string is a palindrome, false otherwise.",
+      "hint": "isPalindrome(\"level\") → true",
+      "starter_code": "#include <iostream>\n#include <string>\nusing namespace std;\nbool isPalindrome(string s) {\n    // TODO: check palindrome\n}\nint main() {\n    cout << (isPalindrome(\"level\") ? \"true\" : \"false\");\n}",
+      "expected_output": "true",
+      "difficulty": "medium",
+      "narrative": "It reads the same forwards and backwards. Nothing else does anymore.",
+      "hints": [
+        "compare the string to its reverse",
+        "or use two pointers — one from each end",
+        "move inward until they meet"
+      ]
+    },
+    {
+      "id": "cpp_007",
+      "title": "Pointer Swap",
+      "prompt": "Use pointers to swap the values of a and b.",
+      "hint": "x=5, y=9 → x=9, y=5",
+      "starter_code": "#include <iostream>\nusing namespace std;\nvoid swapVals(int* a, int* b) {\n    // TODO: swap using pointers\n}\nint main() {\n    int x = 5, y = 9;\n    swapVals(&x, &y);\n    cout << x << \" \" << y;\n}",
+      "expected_output": "9 5",
+      "difficulty": "hard",
+      "narrative": "The values changed places. You didn't see it happen. Nothing does anymore.",
+      "hints": [
+        "a pointer holds a memory address — dereference with *",
+        "you need a temporary variable to hold one value during the swap",
+        "int temp = *a; *a = *b; *b = temp;"
+      ]
+    },
+    {
+      "id": "cpp_008",
+      "title": "Class: Rectangle",
+      "prompt": "Finish the Rectangle class so area() returns width * height.",
+      "hint": "Rectangle(4, 6).area() → 24",
+      "starter_code": "#include <iostream>\nusing namespace std;\nclass Rectangle {\npublic:\n    int w, h;\n    Rectangle(int w, int h) : w(w), h(h) {}\n    int area() {\n        // TODO: compute area\n    }\n};\nint main() {\n    Rectangle r(4, 6);\n    cout << r.area();\n}",
+      "expected_output": "24",
+      "difficulty": "hard",
+      "narrative": "A class. A blueprint for something that no longer exists cleanly.",
+      "hints": [
+        "the class already has w and h as member variables",
+        "area() needs to return a value",
+        "return w * h"
+      ]
+    },
+    {
+      "id": "cpp_009",
+      "title": "Fix the Memory Leak",
+      "prompt": "Fix the function so it correctly allocates, uses, and frees memory without leaking or causing undefined behavior.",
+      "hint": "process() → 15",
+      "starter_code": "#include <iostream>\nusing namespace std;\n\nint process() {\n    int* p = new int(10);\n\n    // TODO: create a reference 'r' to the allocated int\n    // TODO: increment the referenced value by 5\n\n    // TODO: return the value safely WITHOUT leaking memory\n    // HINT: delete exactly once, and do not use 'p' after deleting it\n}\n\nint main() {\n    cout << process();\n}",
+      "expected_output": "15",
+      "difficulty": "hard",
+      "narrative": "Memory allocated. Memory forgotten. The world knows this feeling well by now.",
+      "hints": [
+        "a reference is declared with & — int& r = *p",
+        "increment through the reference, not the pointer",
+        "save the value before you delete, then return the saved value"
       ]
     }
   ]

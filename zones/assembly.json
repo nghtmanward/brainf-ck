@@ -7,23 +7,62 @@
   "puzzles": [
     {
       "id": "asm_001",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "program": "",
+      "title": "Add Two Numbers",
+      "prompt": "Complete the program so it adds 5 and 7, storing the result in EAX.",
+      "hint": "EAX = 5 + 7 → 12",
+      "starter_code": "section .text\n    global _start\n\n_start:\n    mov eax, 5\n    ; TODO: add 7 to eax\n\n    ; exit\n    mov ebx, eax\n    mov eax, 1\n    int 0x80",
+      "expected_output": "12",
       "expected_registers": {
-        "eax": "",
-        "ebx": "",
-        "ecx": "",
-        "edx": ""
+        "eax": "1",
+        "ebx": "12"
       },
-      "expected_memory": "",
-      "narrative_fail": "",
-      "narrative_success": "The void recedes. The flowers return. You are still here.",
+      "difficulty": "easy",
+      "narrative": "The void is quiet. Just you and the registers. You know what to do.",
+      "narrative_success": "",
       "hints": [
-        "",
-        "",
-        ""
+        "ADD is the instruction for addition",
+        "ADD destination, source adds source into destination",
+        "add eax, 7"
+      ]
+    },
+    {
+      "id": "asm_002",
+      "title": "Print Hello",
+      "prompt": "Fix the program so it prints 'Hi' using Linux sys_write.",
+      "hint": "syscall: eax=4, ebx=1, ecx=msg, edx=len",
+      "starter_code": "section .data\n    msg db \"Hi\", 0xA\n    len equ $ - msg\n\nsection .text\n    global _start\n\n_start:\n    ; TODO: write msg to stdout\n    ; hint: eax=4, ebx=1, ecx=msg, edx=len\n\n    ; exit\n    mov eax, 1\n    mov ebx, 0\n    int 0x80",
+      "expected_output": "Hi",
+      "expected_registers": {
+        "eax": "1",
+        "ebx": "0"
+      },
+      "difficulty": "medium",
+      "narrative": "You are speaking directly to the kernel now. No abstractions. No safety net.",
+      "narrative_success": "",
+      "hints": [
+        "sys_write is syscall number 4",
+        "set eax=4, ebx=1 (stdout), ecx=msg address, edx=length",
+        "then int 0x80 triggers the syscall"
+      ]
+    },
+    {
+      "id": "asm_003",
+      "title": "Loop Sum",
+      "prompt": "Use a loop to sum the numbers 1 through 5 and store the result in EAX.",
+      "hint": "1+2+3+4+5 → 15",
+      "starter_code": "section .text\n    global _start\n\n_start:\n    mov eax, 0      ; sum\n    mov ebx, 1      ; counter\n\nloop_start:\n    ; TODO: add ebx to eax\n    ; TODO: increment ebx\n    ; TODO: loop until ebx > 5\n\n    jmp loop_start\n\nend_loop:\n    ; exit with eax as return code\n    mov ebx, eax\n    mov eax, 1\n    int 0x80",
+      "expected_output": "15",
+      "expected_registers": {
+        "eax": "1",
+        "ebx": "15"
+      },
+      "difficulty": "hard",
+      "narrative": "A loop. The most human thing in computing. Down here it is just jumps and flags.",
+      "narrative_success": "The void recedes. The flowers return. You are still here. Barely.",
+      "hints": [
+        "add eax, ebx adds the counter to the sum",
+        "inc ebx increments the counter",
+        "cmp ebx, 5 then jg end_loop exits when counter exceeds 5"
       ]
     }
   ]

@@ -7,72 +7,137 @@
   "puzzles": [
     {
       "id": "rs_001",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Return Hello",
+      "prompt": "Complete the function so it returns the string \"Hello\".",
+      "hint": "greet() → \"Hello\"",
+      "starter_code": "fn greet() -> String {\n    // TODO: return \"Hello\"\n}\n\nfn main() {\n    println!(\"{}\", greet());\n}",
+      "expected_output": "Hello",
+      "difficulty": "easy",
+      "narrative": "Rust says hello. It seems friendly. It is not friendly.",
       "hints": [
-        "",
-        "",
-        ""
+        "String::from() creates an owned String",
+        "functions return the last expression without a semicolon",
+        "String::from(\"Hello\")"
       ]
     },
     {
       "id": "rs_002",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Sum a Vector",
+      "prompt": "Return the sum of all numbers in the vector.",
+      "hint": "sum_vec(vec![1,2,3,4]) → 10",
+      "starter_code": "fn sum_vec(v: Vec<i32>) -> i32 {\n    // TODO: sum values\n}\n\nfn main() {\n    println!(\"{}\", sum_vec(vec![1,2,3,4]));\n}",
+      "expected_output": "10",
+      "difficulty": "easy",
+      "narrative": "A vector. Not an array. The distinction will matter later.",
       "hints": [
-        "",
-        "",
-        ""
+        "iterators have a sum() method",
+        "v.iter() creates an iterator over references",
+        "v.iter().sum()"
       ]
     },
     {
       "id": "rs_003",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Reverse a String",
+      "prompt": "Reverse the input string without using built-in reverse().",
+      "hint": "reverse(\"hello\") → \"olleh\"",
+      "starter_code": "fn reverse(s: &str) -> String {\n    // TODO: reverse manually\n}\n\nfn main() {\n    println!(\"{}\", reverse(\"hello\"));\n}",
+      "expected_output": "olleh",
+      "difficulty": "medium",
+      "narrative": "Strings in Rust are not simple. Nothing in Rust is simple.",
       "hints": [
-        "",
-        "",
-        ""
+        "chars() iterates over characters",
+        "rev() reverses an iterator",
+        "s.chars().rev().collect()"
       ]
     },
     {
       "id": "rs_004",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Count Characters",
+      "prompt": "Count how many times the character 'x' appears in the string.",
+      "hint": "count_x(\"xoxooxxx\") → 5",
+      "starter_code": "fn count_x(s: &str) -> usize {\n    // TODO: count occurrences of 'x'\n}\n\nfn main() {\n    println!(\"{}\", count_x(\"xoxooxxx\"));\n}",
+      "expected_output": "5",
+      "difficulty": "medium",
+      "narrative": "Count the x's. There are always more x's than you expect.",
       "hints": [
-        "",
-        "",
-        ""
+        "chars() gives you an iterator of characters",
+        "filter() keeps only matching elements",
+        "s.chars().filter(|&c| c == 'x').count()"
       ]
     },
     {
       "id": "rs_005",
-      "title": "",
-      "prompt": "",
-      "hint": "",
-      "testCall": "",
-      "expected": "",
-      "narrative": "",
+      "title": "Filter Even Numbers",
+      "prompt": "Return a new vector containing only even numbers.",
+      "hint": "filter_even(vec![1,2,3,4,5,6]) → [2, 4, 6]",
+      "starter_code": "fn filter_even(v: Vec<i32>) -> Vec<i32> {\n    // TODO: return only even numbers\n}\n\nfn main() {\n    let result = filter_even(vec![1,2,3,4,5,6]);\n    println!(\"{:?}\", result);\n}",
+      "expected_output": "[2, 4, 6]",
+      "difficulty": "medium",
+      "narrative": "Only the even ones. The odd ones belong to the compiler now.",
       "hints": [
-        "",
-        "",
-        ""
+        "iter() creates an iterator, into_iter() consumes the vector",
+        "filter() takes a closure that returns bool",
+        "v.into_iter().filter(|x| x % 2 == 0).collect()"
+      ]
+    },
+    {
+      "id": "rs_006",
+      "title": "Ownership Fix",
+      "prompt": "Fix the function so it returns the length without causing a move error.",
+      "hint": "text must still be valid after calling length()",
+      "starter_code": "fn length(s: &String) -> usize {\n    // TODO: return length without moving s\n}\n\nfn main() {\n    let text = String::from(\"hello\");\n    println!(\"{}\", length(&text));\n    println!(\"{}\", text);\n}",
+      "expected_output": "5\nhello",
+      "difficulty": "hard",
+      "narrative": "You tried to use something you already gave away. The compiler remembers.",
+      "hints": [
+        "the function already takes a reference — &String",
+        "references do not move ownership",
+        "s.len() returns the length of a String"
+      ]
+    },
+    {
+      "id": "rs_007",
+      "title": "Borrow Checker Challenge",
+      "prompt": "Fix the code so it compiles — mutable and immutable borrows must not overlap.",
+      "hint": "r1 and r2 cannot exist at the same time",
+      "starter_code": "fn main() {\n    let mut n = 10;\n    let r1 = &n;\n    let r2 = &mut n;\n    println!(\"{}\", r1);\n    *r2 += 5;\n    println!(\"{}\", n);\n}",
+      "expected_output": "10\n15",
+      "difficulty": "hard",
+      "narrative": "Two hands reaching for the same thing. The compiler cut one off.",
+      "hints": [
+        "immutable and mutable borrows cannot coexist",
+        "r1's lifetime must end before r2 is created",
+        "use r1 before creating r2 — scope determines lifetime"
+      ]
+    },
+    {
+      "id": "rs_008",
+      "title": "Implement Struct Method",
+      "prompt": "Finish the Point struct so distance() returns the Manhattan distance.",
+      "hint": "Point { x: 3, y: -4 } → 7",
+      "starter_code": "struct Point { x: i32, y: i32 }\n\nimpl Point {\n    fn distance(&self) -> i32 {\n        // TODO: |x| + |y|\n    }\n}\n\nfn main() {\n    let p = Point { x: 3, y: -4 };\n    println!(\"{}\", p.distance());\n}",
+      "expected_output": "7",
+      "difficulty": "hard",
+      "narrative": "A struct. An impl. A self. The language is building a mirror of the world.",
+      "hints": [
+        "self refers to the current instance",
+        "i32 has an abs() method for absolute value",
+        "self.x.abs() + self.y.abs()"
+      ]
+    },
+    {
+      "id": "rs_009",
+      "title": "Lifetimes Nightmare",
+      "prompt": "Fix the function so it returns a reference safely using lifetimes.",
+      "hint": "longest(\"hello\", \"world!!!\") → \"world!!!\"",
+      "starter_code": "fn longest<'a>(a: &'a str, b: &'a str) -> &'a str {\n    // TODO: return the longer string\n}\n\nfn main() {\n    let s1 = String::from(\"hello\");\n    let s2 = String::from(\"world!!!\");\n    println!(\"{}\", longest(&s1, &s2));\n}",
+      "expected_output": "world!!!",
+      "difficulty": "hard",
+      "narrative": "The compiler wants to know how long things live. Everything has an expiry now.",
+      "hints": [
+        "the lifetime 'a is already declared — both inputs share it",
+        "the return reference lives as long as the shorter input",
+        "if a.len() >= b.len() { a } else { b }"
       ]
     }
   ]

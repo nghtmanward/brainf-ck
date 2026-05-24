@@ -1,0 +1,162 @@
+{
+  "zone": "sql",
+  "label": "ZONE_03 :: SQL",
+  "badge": "SQL",
+  "puzzle_count": 4,
+  "corruption_per_puzzle": 12,
+  "puzzles": [
+    {
+      "id": "sql_001",
+      "title": "Select All",
+      "prompt": "Return all rows from the table 'users'.",
+      "hint": "users table has id, name, age, score, email columns",
+      "starter_code": "SELECT -- TODO\nFROM users;",
+      "schema": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, score INTEGER, email TEXT);",
+      "seed_data": "INSERT INTO users VALUES (1,'Alice',25,88,'alice@mail.com'),(2,'Bob',34,72,'bob@mail.com'),(3,'Carol',29,95,'carol@mail.com'),(4,'Dave',41,60,'dave@mail.com'),(5,'Eve',31,77,'eve@mail.com');",
+      "expected_output": "1|Alice|25|88|alice@mail.com\n2|Bob|34|72|bob@mail.com\n3|Carol|29|95|carol@mail.com\n4|Dave|41|60|dave@mail.com\n5|Eve|31|77|eve@mail.com",
+      "difficulty": "easy",
+      "narrative": "Everything is here. All the rows. Nothing is missing yet.",
+      "hints": [
+        "SELECT retrieves columns from a table",
+        "* is a wildcard that means all columns",
+        "SELECT * FROM users"
+      ]
+    },
+    {
+      "id": "sql_002",
+      "title": "Filter by Age",
+      "prompt": "Select all users older than 30.",
+      "hint": "age > 30",
+      "starter_code": "SELECT *\nFROM users\nWHERE -- TODO;",
+      "schema": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, score INTEGER, email TEXT);",
+      "seed_data": "INSERT INTO users VALUES (1,'Alice',25,88,'alice@mail.com'),(2,'Bob',34,72,'bob@mail.com'),(3,'Carol',29,95,'carol@mail.com'),(4,'Dave',41,60,'dave@mail.com'),(5,'Eve',31,77,'eve@mail.com');",
+      "expected_output": "2|Bob|34|72|bob@mail.com\n4|Dave|41|60|dave@mail.com\n5|Eve|31|77|eve@mail.com",
+      "difficulty": "easy",
+      "narrative": "Some rows didn't come back. WHERE did they go. WHERE.",
+      "hints": [
+        "WHERE filters rows based on a condition",
+        "comparison operators: =, >, <, >=, <=",
+        "WHERE age > 30"
+      ]
+    },
+    {
+      "id": "sql_003",
+      "title": "Count Rows",
+      "prompt": "Count how many users exist in the table.",
+      "hint": "returns a single number",
+      "starter_code": "SELECT -- TODO\nFROM users;",
+      "schema": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, score INTEGER, email TEXT);",
+      "seed_data": "INSERT INTO users VALUES (1,'Alice',25,88,'alice@mail.com'),(2,'Bob',34,72,'bob@mail.com'),(3,'Carol',29,95,'carol@mail.com'),(4,'Dave',41,60,'dave@mail.com'),(5,'Eve',31,77,'eve@mail.com');",
+      "expected_output": "5",
+      "difficulty": "medium",
+      "narrative": "How many are left. Count carefully. The number keeps changing.",
+      "hints": [
+        "aggregate functions collapse multiple rows into one",
+        "COUNT() counts rows",
+        "SELECT COUNT(*) FROM users"
+      ]
+    },
+    {
+      "id": "sql_004",
+      "title": "Order by Score",
+      "prompt": "Select all players ordered by score descending.",
+      "hint": "highest score first",
+      "starter_code": "SELECT *\nFROM players\n-- TODO;",
+      "schema": "CREATE TABLE players (id INTEGER PRIMARY KEY, name TEXT, score INTEGER);",
+      "seed_data": "INSERT INTO players VALUES (1,'Alice',88),(2,'Bob',72),(3,'Carol',95),(4,'Dave',60),(5,'Eve',77);",
+      "expected_output": "3|Carol|95\n1|Alice|88\n5|Eve|77\n2|Bob|72\n4|Dave|60",
+      "difficulty": "medium",
+      "narrative": "The order matters. It always mattered. You just didn't notice until now.",
+      "hints": [
+        "ORDER BY sorts the result set",
+        "ASC is ascending, DESC is descending",
+        "ORDER BY score DESC"
+      ]
+    },
+    {
+      "id": "sql_005",
+      "title": "Join Tables",
+      "prompt": "Return all orders with their associated user names.",
+      "hint": "orders.user_id links to users.id",
+      "starter_code": "SELECT o.id, -- TODO\nFROM orders o\nJOIN users u ON -- TODO;",
+      "schema": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, score INTEGER, email TEXT); CREATE TABLE orders (id INTEGER PRIMARY KEY, user_id INTEGER, product TEXT);",
+      "seed_data": "INSERT INTO users VALUES (1,'Alice',25,88,'alice@mail.com'),(2,'Bob',34,72,'bob@mail.com'),(3,'Carol',29,95,'carol@mail.com'); INSERT INTO orders VALUES (1,1,'Widget'),(2,2,'Gadget'),(3,1,'Doohickey'),(4,3,'Thingamajig');",
+      "expected_output": "1|Alice|Widget\n2|Bob|Gadget\n3|Alice|Doohickey\n4|Carol|Thingamajig",
+      "difficulty": "medium",
+      "narrative": "Two tables. One truth. The join is the only thing holding them together.",
+      "hints": [
+        "JOIN combines rows from two tables based on a condition",
+        "ON specifies how the tables relate",
+        "JOIN users u ON o.user_id = u.id"
+      ]
+    },
+    {
+      "id": "sql_006",
+      "title": "Group and Aggregate",
+      "prompt": "Return each department and the number of employees in it.",
+      "hint": "department | count",
+      "starter_code": "SELECT department, -- TODO\nFROM employees\nGROUP BY department;",
+      "schema": "CREATE TABLE employees (id INTEGER PRIMARY KEY, name TEXT, department TEXT, salary INTEGER);",
+      "seed_data": "INSERT INTO employees VALUES (1,'Alice','Engineering',90000),(2,'Bob','Engineering',85000),(3,'Carol','Marketing',70000),(4,'Dave','Marketing',72000),(5,'Eve','Engineering',95000),(6,'Frank','HR',60000);",
+      "expected_output": "Engineering|3\nHR|1\nMarketing|2",
+      "difficulty": "hard",
+      "narrative": "Groups form. Some are larger than others. One stands alone.",
+      "hints": [
+        "GROUP BY collapses rows with the same value into one",
+        "COUNT(*) counts rows per group",
+        "SELECT department, COUNT(*) FROM employees GROUP BY department"
+      ]
+    },
+    {
+      "id": "sql_007",
+      "title": "Find Duplicates",
+      "prompt": "Find all emails that appear more than once in the users table.",
+      "hint": "email | count where count > 1",
+      "starter_code": "SELECT email, COUNT(*)\nFROM users\nGROUP BY email\nHAVING -- TODO;",
+      "schema": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, score INTEGER, email TEXT);",
+      "seed_data": "INSERT INTO users VALUES (1,'Alice',25,88,'alice@mail.com'),(2,'Bob',34,72,'bob@mail.com'),(3,'Carol',29,95,'alice@mail.com'),(4,'Dave',41,60,'dave@mail.com'),(5,'Eve',31,77,'bob@mail.com');",
+      "expected_output": "alice@mail.com|2\nbob@mail.com|2",
+      "difficulty": "hard",
+      "narrative": "Some things appear twice. They were never supposed to. Neither were you.",
+      "hints": [
+        "HAVING filters groups after aggregation",
+        "it is like WHERE but for grouped results",
+        "HAVING COUNT(*) > 1"
+      ]
+    },
+    {
+      "id": "sql_008",
+      "title": "Subquery Challenge",
+      "prompt": "Select all users whose score is above the average score.",
+      "hint": "use a subquery to calculate the average",
+      "starter_code": "SELECT *\nFROM users\nWHERE score > ( -- TODO\n);",
+      "schema": "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER, score INTEGER, email TEXT);",
+      "seed_data": "INSERT INTO users VALUES (1,'Alice',25,88,'alice@mail.com'),(2,'Bob',34,72,'bob@mail.com'),(3,'Carol',29,95,'carol@mail.com'),(4,'Dave',41,60,'dave@mail.com'),(5,'Eve',31,77,'eve@mail.com');",
+      "expected_output": "1|Alice|25|88|alice@mail.com\n3|Carol|29|95|carol@mail.com\n5|Eve|31|77|eve@mail.com",
+      "difficulty": "hard",
+      "narrative": "Above average. That used to mean something. The average keeps dropping.",
+      "hints": [
+        "a subquery is a SELECT inside another SELECT",
+        "AVG() calculates the average of a column",
+        "WHERE score > (SELECT AVG(score) FROM users)"
+      ]
+    },
+    {
+      "id": "sql_009",
+      "title": "Window Function Wizardry",
+      "prompt": "For each employee return their name, salary, and rank based on salary highest first.",
+      "hint": "name | salary | rank",
+      "starter_code": "SELECT name, salary,\n       -- TODO: window function for ranking\nFROM employees;",
+      "schema": "CREATE TABLE employees (id INTEGER PRIMARY KEY, name TEXT, department TEXT, salary INTEGER);",
+      "seed_data": "INSERT INTO employees VALUES (1,'Alice','Engineering',90000),(2,'Bob','Engineering',85000),(3,'Carol','Marketing',70000),(4,'Dave','Marketing',72000),(5,'Eve','Engineering',95000),(6,'Frank','HR',60000);",
+      "expected_output": "Eve|95000|1\nAlice|90000|2\nBob|85000|3\nDave|72000|4\nCarol|70000|5\nFrank|60000|6",
+      "difficulty": "hard",
+      "narrative": "Everyone is ranked. Everyone has always been ranked. Now you can see it.",
+      "hints": [
+        "window functions operate across rows without collapsing them",
+        "RANK() assigns a rank within an ordered partition",
+        "RANK() OVER (ORDER BY salary DESC)"
+      ]
+    }
+  ]
+}
